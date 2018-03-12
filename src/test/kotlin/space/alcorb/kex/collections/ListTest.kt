@@ -44,6 +44,6 @@ class ListTest {
         val orig = mutableListOf("apple", "orange")
         assert(orig.contains { it.contains("app") })
         assert(orig.contains { it == "apple" })
-        assert(orig.contains { it.length == 7 })
+        assert(!orig.contains { it.length == 7 })
     }
 }
