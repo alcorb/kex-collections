@@ -2,7 +2,6 @@ package space.alcorb.kex.collections
 
 // Toogle item in list
 fun <T> MutableList<T>.toggle(item: T) {
-
     if (contains(item)) {
         remove(item)
     } else {
@@ -27,3 +26,5 @@ fun <T> T.addTo(list: MutableList<T>) {
 
 // Check is list contains element
 inline fun <T> Iterable<T>.contains(predicate: (T) -> Boolean) = firstOrNull(predicate) != null
+
+inline fun <T, R> List<T>?.mapOrEmpty(transform: (T) -> R): List<R> = this?.map(transform) ?: listOf()
