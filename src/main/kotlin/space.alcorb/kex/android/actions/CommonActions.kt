@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import space.alcorb.kex.Kex
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,69 +22,64 @@ import java.util.*
  * @author Yamushev Igor
  * @since 06.09.18
  */
-private fun launchOrToast(
-    context: Context,
-    intent: Intent,
-    errorStringId: Int
-) {
-    if (canLaunchIntent(context, intent))
+fun launchAppOrToast(intent: Intent, error: String) {
+    val context = Kex.instance.context
+    
+    if (canLaunchIntent(intent))
         context.startActivity(intent)
     else
-        Toast.makeText(context, errorStringId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
 }
 
-fun canLaunchIntent(context: Context, intent: Intent): Boolean {
-    val pm = context.packageManager
+fun canLaunchIntent(intent: Intent): Boolean {
+    val pm = Kex.instance.context.packageManager
     val res = pm.queryIntentActivities(intent, 0)
     return (res != null && res.size != 0)
 }
 
-fun shareTextToOtherApp(
-    context: Context,
-    shareBody: String?,
-    sendWithTitleId: Int,
-    errorNoMessengerId: Int
-) {
+fun shareTextToOtherApp(shareBody: String?, sendWithTitle: String, appsNotFoundText: String) {
+    val context = Kex.instance.context
+    
     val intent = Intent(Intent.ACTION_SEND)
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TEXT, shareBody ?: "")
-
-    launchOrToast(context, Intent.createChooser(intent, context.getString(sendWithTitleId)), errorNoMessengerId)
+    
+    launchAppOrToast(Intent.createChooser(intent, sendWithTitle), appsNotFoundText)
 }
 
-fun Context.openAppByPackage(pack: String) {
-    val launchIntent = this.packageManager.getLaunchIntentForPackage(pack)
-    this.startActivity(launchIntent)
+fun openAppByPackage(pack: String, appNotFoundText: String) {
+    val launchIntent = Kex.instance.context.packageManager.getLaunchIntentForPackage(pack)
+    launchAppOrToast(launchIntent, appNotFoundText)
 }
 
-fun Context.openAppInGooglePlayOrInBrowser(pack: String) {
+fun openAppInGooglePlayOrInBrowser(pack: String) {
     val inMarketIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pack"))
 
-    if (canLaunchIntent(this, inMarketIntent)) {
-        this.startActivity(inMarketIntent)
+    if (canLaunchIntent(inMarketIntent)) {
+        Kex.instance.context.startActivity(inMarketIntent)
     } else {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse("http://play.google.com/store/apps/details?id=$pack")
-        this.startActivity(i)
+        Kex.instance.context.startActivity(i)
     }
 }
 
-fun emailTo(context: Context, email: String?) {
+fun emailTo(email: String?, mailAgentsNotFoundText: String) {
     val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
         "mailto", email, null
     ))
-    context.startActivity(Intent.createChooser(emailIntent, null))
+    launchAppOrToast(Intent.createChooser(emailIntent, null), mailAgentsNotFoundText)
 }
 
-fun callTo(context: Context, phone: String?) {
+fun callTo(phone: String) {
     val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts(
         "tel", phone, null
     ))
-    context.startActivity(intent)
+    Kex.instance.context.startActivity(intent)
 }
 
-fun openUrl(context: Context, url: String) {
-    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+fun openUrl(url: String) {
+    Kex.instance.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 }
 
 /**
@@ -91,7 +87,7 @@ fun openUrl(context: Context, url: String) {
  */
 fun AppCompatActivity.dispatchToTakePhoto(REQUEST_TAKE_PHOTO: Int, authorityString: String) {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    if (canLaunchIntent(this, intent)) {
+    if (canLaunchIntent(intent)) {
         var photoFile: File? = null
         try {
             photoFile = createImageFile(this)
@@ -123,7 +119,7 @@ fun AppCompatActivity.dispatchToTakePhoto(REQUEST_TAKE_PHOTO: Int, authorityStri
  */
 fun Fragment.dispatchToTakePhoto(REQUEST_TAKE_PHOTO: Int, authorityString: String) {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    if (canLaunchIntent(context!!, intent)) {
+    if (canLaunchIntent(intent)) {
         var photoFile: File? = null
         try {
             photoFile = createImageFile(context!!)

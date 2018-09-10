@@ -19,19 +19,20 @@ import space.alcorb.kex.prinitives.fromHtml
  * @since 06.09.18
  */
 object DataBindingTools {
+    
+    @JvmStatic
+    fun isNull(obj: Any?) = obj == null
+    
+    @JvmStatic
+    fun isNullOrEmpty(text: String?) = text.isNullOrEmpty()
+    
 
     @JvmStatic
     @BindingAdapter("visibleIf")
     fun setVisibilityByCondition(view: View, condition: Boolean) {
         if (condition) view.show() else view.hide()
     }
-
-    @JvmStatic
-    fun isNull(obj: Any?) = obj == null
-
-    @JvmStatic
-    fun isNullOrEmpty(text: String?) = text.isNullOrEmpty()
-
+    
     @JvmStatic
     @BindingAdapter(value = ["imageUrl", "placeHolder"], requireAll = false)
     fun setImageUrl(view: ImageView, url: String?, placeHolder: Int?) {
