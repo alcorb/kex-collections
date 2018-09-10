@@ -22,13 +22,11 @@ import java.util.*
  * @author Yamushev Igor
  * @since 06.09.18
  */
-fun launchAppOrToast(intent: Intent, error: String) {
-    val context = Kex.instance.context
-    
+fun Context.launchAppOrToast(intent: Intent, error: String) {
     if (canLaunchIntent(intent))
-        context.startActivity(intent)
+        this.startActivity(intent)
     else
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
 }
 
 fun canLaunchIntent(intent: Intent): Boolean {
@@ -37,9 +35,7 @@ fun canLaunchIntent(intent: Intent): Boolean {
     return (res != null && res.size != 0)
 }
 
-fun shareTextToOtherApp(shareBody: String?, sendWithTitle: String, appsNotFoundText: String) {
-    val context = Kex.instance.context
-    
+fun Context.shareTextToOtherApp(shareBody: String?, sendWithTitle: String, appsNotFoundText: String) {
     val intent = Intent(Intent.ACTION_SEND)
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TEXT, shareBody ?: "")
@@ -47,39 +43,39 @@ fun shareTextToOtherApp(shareBody: String?, sendWithTitle: String, appsNotFoundT
     launchAppOrToast(Intent.createChooser(intent, sendWithTitle), appsNotFoundText)
 }
 
-fun openAppByPackage(pack: String, appNotFoundText: String) {
-    val launchIntent = Kex.instance.context.packageManager.getLaunchIntentForPackage(pack)
+fun Context.openAppByPackage(pack: String, appNotFoundText: String) {
+    val launchIntent = packageManager.getLaunchIntentForPackage(pack)
     launchAppOrToast(launchIntent, appNotFoundText)
 }
 
-fun openAppInGooglePlayOrInBrowser(pack: String) {
+fun Context.openAppInGooglePlayOrInBrowser(pack: String) {
     val inMarketIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pack"))
 
     if (canLaunchIntent(inMarketIntent)) {
-        Kex.instance.context.startActivity(inMarketIntent)
+        startActivity(inMarketIntent)
     } else {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse("http://play.google.com/store/apps/details?id=$pack")
-        Kex.instance.context.startActivity(i)
+        startActivity(i)
     }
 }
 
-fun emailTo(email: String?, mailAgentsNotFoundText: String) {
+fun Context.emailTo(email: String?, mailAgentsNotFoundText: String) {
     val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
         "mailto", email, null
     ))
     launchAppOrToast(Intent.createChooser(emailIntent, null), mailAgentsNotFoundText)
 }
 
-fun callTo(phone: String) {
+fun Context.callTo(phone: String) {
     val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts(
         "tel", phone, null
     ))
-    Kex.instance.context.startActivity(intent)
+    startActivity(intent)
 }
 
-fun openUrl(url: String) {
-    Kex.instance.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+fun Context.openUrl(url: String) {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 }
 
 /**
