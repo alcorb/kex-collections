@@ -10,8 +10,10 @@ import space.alcorb.kex.android.views.doAfterTextChanged
  * @author Yamushev Igor
  * @since  07.09.18
  */
+private val RUS_PHONE_EXTRA_SYMBOLS_REG = Regex("[\\+\\-\\s]")
+
 fun TextView.isNotEmpty(onError: ((Boolean) -> Unit)? = null): BehaviorSubject<Boolean> {
-    val subject = BehaviorSubject.createDefault(false)
+    val subject = BehaviorSubject.createDefault(this.text.isNotEmpty())
     this.doAfterTextChanged {
         subject.onNext(it.isNotEmpty())
     }
@@ -19,9 +21,9 @@ fun TextView.isNotEmpty(onError: ((Boolean) -> Unit)? = null): BehaviorSubject<B
 }
 
 fun TextView.isRusMobilePhoneNumberValid(onError: ((Boolean) -> Unit)?): BehaviorSubject<Boolean> {
-    val subject = BehaviorSubject.createDefault(false)
+    val subject = BehaviorSubject.createDefault(!this.text.isNullOrEmpty() && this.text.replace(RUS_PHONE_EXTRA_SYMBOLS_REG, "").length == 11)
     this.doAfterTextChanged {
-        subject.onNext(!it.isNullOrEmpty() && it.replace(Regex("[\\+\\-\\s]"), "").length == 11)
+        subject.onNext(!it.isNullOrEmpty() && it.replace(RUS_PHONE_EXTRA_SYMBOLS_REG, "").length == 11)
     }
     return subject
 }

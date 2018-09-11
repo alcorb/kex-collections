@@ -11,18 +11,21 @@ import android.text.Spanned
  * @author Yamushev Igor
  * @since  07.09.18
  */
-@Suppress("DEPRECATION")
-fun String.fromHtml(): Spanned {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-         Html.fromHtml(this)
-    }
-}
 
-fun String.asHexToColor(): Int {
-    val rawColor = if (this[0] == '#') this else "#$this"
-    return Color.parseColor(rawColor)
-}
+fun String.fromHtml(): Spanned =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            @Suppress("DEPRECATION")
+            Html.fromHtml(this)
+        }
+
+fun String.asHexToColor(default: Int = Color.TRANSPARENT): Int =
+        try {
+            val rawColor = if (this[0] == '#') this else "#$this"
+            Color.parseColor(rawColor)
+        } catch (e: Exception) {
+            default
+        }
 
 fun String.matches(pattern: String) = this.matches(Regex(pattern))

@@ -3,6 +3,7 @@ package space.alcorb.kex.android.context
 import android.content.Context
 import android.os.Build
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -49,3 +50,13 @@ fun Context.drawable(resId: Int) =
 
 fun Context.show(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+fun AppCompatActivity.setStatusBarColor(colorId: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        this.window.statusBarColor = ContextCompat.getColor(this, colorId)
+}
+
+fun FragmentActivity.setStatusBarColor(colorId: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        this.window.statusBarColor = ContextCompat.getColor(this, colorId)
+}
