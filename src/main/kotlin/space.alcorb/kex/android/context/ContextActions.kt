@@ -51,11 +51,6 @@ fun Context.drawable(resId: Int) =
 fun Context.show(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
-fun AppCompatActivity.setStatusBarColor(colorId: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        this.window.statusBarColor = ContextCompat.getColor(this, colorId)
-}
-
 fun FragmentActivity.setStatusBarColor(colorId: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         this.window.statusBarColor = ContextCompat.getColor(this, colorId)
