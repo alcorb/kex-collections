@@ -15,10 +15,7 @@ import java.io.IOException
  * @author Yamushev Igor
  * @since  07.09.18
  */
-fun <T, ErrorBodyType> Single<Response<T>>.asRetrofitResponse(
-    errorTool: NetworkErrorTool<ErrorBodyType>?
-    
-) =
+fun <T, ErrorBodyType> Single<Response<T>>.asRetrofitResponse(errorTool: NetworkErrorTool<ErrorBodyType>?) =
         this
             .subscribeOn(Schedulers.io())
             .map {
@@ -56,17 +53,15 @@ fun <T, ErrorBodyType> Single<Response<T>>.asRetrofitResponse(
                 }
             }
 
-fun <ErrorBodyType> Single<Response<Void>>.asVoid(
+fun <T, ErrorBodyType> Single<Response<T>>.asVoid(
     errorTool: NetworkErrorTool<ErrorBodyType>?
 ) =
         this
             .asRetrofitResponse(errorTool)
             .observeOn(AndroidSchedulers.mainThread())
 
-fun <T, ErrorBodyType> Single<Response<T>>.asBody(
-    errorTool: NetworkErrorTool<ErrorBodyType>?,
-    observeOnScheduler: Scheduler = AndroidSchedulers.mainThread()
-) =
+fun <T, ErrorBodyType> Single<Response<T>>.asBody(errorTool: NetworkErrorTool<ErrorBodyType>?,
+                                                  observeOnScheduler: Scheduler = AndroidSchedulers.mainThread()) =
         this
             .asRetrofitResponse(errorTool)
             .map {
