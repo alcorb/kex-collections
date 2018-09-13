@@ -6,7 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import space.alcorb.kex.android.dimensions.asDpToPx
 import space.alcorb.kex.android.views.hide
 import space.alcorb.kex.android.views.show
 import space.alcorb.kex.prinitives.fromHtml
@@ -34,25 +36,22 @@ object DataBindingTools {
     }
     
     @JvmStatic
-    @BindingAdapter(value = ["imageUrl", "placeHolder"], requireAll = false)
-    fun setImageUrl(view: ImageView, url: String?, placeHolder: Int?) {
+    @BindingAdapter(value = ["imageUrl", "placeHolder", "cornerRadius", "isCircle"], requireAll = false)
+    fun setImageUrl(view: ImageView, url: String?, placeHolder: Int?, cornerRadius: Int?, isCircle: Boolean?) {
         if (url == null) return
-        if (placeHolder != null) {
-            Glide.with(view.context)
-                .load(url)
-                .apply(
-                    RequestOptions()
-                        .placeholder(placeHolder)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .dontTransform()
-                        .dontAnimate()
-                )
-                .into(view)
-        } else {
-            Glide.with(view.context)
-                .load(url)
-                .into(view)
-        }
+        
+        val requestOptions = RequestOptions()
+        
+        requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE)
+        
+        if (placeHolder != null) requestOptions.placeholder(placeHolder)
+        if (cornerRadius != null) requestOptions.transform(RoundedCorners(cornerRadius.asDpToPx().toInt()))
+        if (isCircle == true) requestOptions.circleCrop()
+    
+        Glide.with(view.context)
+            .load(url)
+            .apply(requestOptions)
+            .into(view)
     }
     
     @JvmStatic
