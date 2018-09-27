@@ -114,14 +114,6 @@ dependencies {
     api "io.reactivex.rxjava2:rxandroid:${rxandroidVersion}"
     api "io.reactivex.rxjava2:rxjava:${rxjavaVersion}"
     api "io.reactivex.rxjava2:rxkotlin:${rxkotlinVersion}"
-
-    // Network
-    api "com.squareup.okhttp3:okhttp:$okhttpVersion"
-    api "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
-    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    api "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    api "com.google.code.gson:gson:$gsonVersion"
 }
 
 def inputFiles = project.fileTree(dir: "src", include: "**/*.kt")

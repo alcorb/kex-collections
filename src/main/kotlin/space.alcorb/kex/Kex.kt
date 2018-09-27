@@ -2,7 +2,6 @@ package space.alcorb.kex
 
 import android.annotation.SuppressLint
 import android.content.Context
-import space.alcorb.kex.network.NetworkErrorTracker
 
 /**
  * @author Yamushev Igor
@@ -11,12 +10,6 @@ import space.alcorb.kex.network.NetworkErrorTracker
 class Kex private constructor() {
     
     lateinit var context: Context
-    
-    lateinit var networkData: NetworkData
-    
-    fun network(block: NetworkData.() -> Unit) {
-        networkData = NetworkData().apply(block)
-    }
     
     companion object {
         @SuppressLint("StaticFieldLeak") lateinit var instance: Kex
@@ -27,12 +20,4 @@ class Kex private constructor() {
         }
     }
     
-}
-
-class NetworkData {
-    lateinit var parsingErrorString: String
-    lateinit var connectionErrorString: String
-    lateinit var emptyBodyResponseString: String
-    
-    var errorTracker: NetworkErrorTracker? = null
 }

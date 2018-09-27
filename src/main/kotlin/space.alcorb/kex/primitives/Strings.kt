@@ -1,4 +1,4 @@
-package space.alcorb.kex.prinitives
+package space.alcorb.kex.primitives
 
 import android.graphics.Color
 import android.os.Build

@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import space.alcorb.kex.android.dimensions.asDpToPx
 import space.alcorb.kex.android.views.hide
 import space.alcorb.kex.android.views.show
-import space.alcorb.kex.prinitives.fromHtml
+import space.alcorb.kex.primitives.fromHtml
 
 /**
  * Tools for Adnroid data binding.
