@@ -19,5 +19,10 @@ fun Int.asDpToPx() =
 fun Float.asDpToPx() =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Kex.instance.context.resources.displayMetrics)
 
+fun Int.asDpToPxInt() =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Kex.instance.context.resources.displayMetrics).toInt()
+fun Float.asDpToPxInt() =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Kex.instance.context.resources.displayMetrics).toInt()
+
 fun Int.asPxToDp(context: Context) = this / getScale()
 fun Float.asPxToDp(context: Context) = this / getScale()
