@@ -20,8 +20,16 @@ inline fun <reified T> AppCompatActivity.extra(key: String, default: T?): Lazy<T
     return@lazy (intent?.extras?.get(key) as? T) ?: default
 }
 
+inline fun <reified T> AppCompatActivity.extraNonNull(key: String, default: T): Lazy<T> = lazy {
+    return@lazy intent.extras!!.get(key) as T
+}
+
 inline fun <reified T> Fragment.extra(key: String, default: T? = null): Lazy<T?> = lazy {
     return@lazy (arguments?.get(key) as? T) ?: default
+}
+
+inline fun <reified T> Fragment.extraNonNull(key: String, default: T? = null): Lazy<T> = lazy {
+    return@lazy arguments!!.get(key) as T
 }
 
 fun Context.hideKeyboard(view: View) {
